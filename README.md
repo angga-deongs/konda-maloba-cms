@@ -1,1 +1,0 @@
-# konda-maloba-cms
