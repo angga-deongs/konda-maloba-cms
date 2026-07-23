@@ -29,3 +29,10 @@ function konda_maloba_pingback_header() {
 	}
 }
 add_action( 'wp_head', 'konda_maloba_pingback_header' );
+
+/**
+ * Hide the admin toolbar on the front end entirely. is_admin() already
+ * makes this filter a no-op inside wp-admin, so the dashboard toolbar
+ * is unaffected — this only hides it on public-facing pages.
+ */
+add_filter( 'show_admin_bar', '__return_false' );

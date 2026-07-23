@@ -81,3 +81,38 @@ function konda_maloba_register_post_types() {
 	);
 }
 add_action( 'init', 'konda_maloba_register_post_types' );
+
+/**
+ * Reorder the wp-admin sidebar to: Posts, Properties, Activities, Pages,
+ * Media. menu_position (on register_post_type above) can't achieve this
+ * on its own — it only slots a CPT at a fixed numeric position and can't
+ * move built-in items like Media below Pages, so this pulls the four
+ * known slugs out and reinserts them as a block right after Posts.
+ * Everything else (Dashboard, separators, Appearance, any plugin-added
+ * menus) keeps its original relative order untouched.
+ */
+function konda_maloba_admin_menu_order( $menu_order ) {
+	if ( ! $menu_order ) {
+		return $menu_order;
+	}
+
+	$block = array(
+		'edit.php?post_type=property',
+		'edit.php?post_type=activity',
+		'edit.php?post_type=page',
+		'upload.php',
+	);
+
+	$rest        = array_values( array_diff( $menu_order, $block ) );
+	$posts_index = array_search( 'edit.php', $rest, true );
+
+	if ( false === $posts_index ) {
+		return $menu_order;
+	}
+
+	array_splice( $rest, $posts_index + 1, 0, $block );
+
+	return $rest;
+}
+add_filter( 'custom_menu_order', '__return_true' );
+add_filter( 'menu_order', 'konda_maloba_admin_menu_order' );

@@ -11,9 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 </main>
 
-<footer id="colophon" class="site-footer">
-	<h1>Footer</h1>
-</footer><!-- #colophon -->
+<?php get_template_part( 'template-parts/components/site-footer' ); ?>
 
 <?php wp_footer(); ?>
 </body>
